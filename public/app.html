@@ -1,0 +1,50 @@
+<template>
+  <require from='./components/make-call'></require>
+  <require from='./components/video-card'></require>
+  <require from='./components/peer-connection'></require>
+  <div class="ui container">
+    <div class="ui divider"></div>
+
+    <div class="ui segment">
+      <h1 class="ui header">${title}</h1>
+    </div>
+
+    <div class="ui segment">
+      <h2 class="ui header">Videos</h2>
+      <div class="ui two column middle aligned very relaxed stackable grid">
+        <div class="center aligned column">
+          <video-card
+            videoid="their-video"
+            who="???"
+            muted=false
+            remote=true
+            description="Remote video">
+          </video-card>
+        </div>
+        <div class="ui vertical divider"></div>
+        <div class="center aligned column">
+          <video-card
+            videoid="my-video"
+            local=true
+            who="you"
+            muted=true
+            description="Your video">
+          </video-card>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="ui segment">
+      <make-call></make-call>
+    </div>
+
+    <div class="ui segment">
+      <peer-connection
+        peerPort="9000"
+        peerPath="/myapp">
+      </peer-connection>
+    </div>
+
+  </div>
+</template>

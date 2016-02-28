@@ -1,0 +1,18 @@
+<template>
+  <form role="form" submit.delegate="call()">
+    <label>Remote NickName: </label>
+    <div class="ui input">
+      <input type="text" value.bind="nickName">
+    </div>
+
+    <button type="submit" class="ui right labeled icon button">
+      <i class="phone icon"></i>
+      Call...
+    </button>
+
+    <button click.trigger="endCall()" class="ui right labeled icon button">
+      <i class="phone square icon"></i>
+      End Call...
+    </button>
+  </form>
+</template>

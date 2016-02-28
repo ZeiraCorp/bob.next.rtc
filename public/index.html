@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BoB:next:RTC</title>
+  <link rel="stylesheet" href="css/semantic.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1"></head>
+<body aurelia-app>
+
+<!--
+<script type="text/javascript" src="js/jquery-2.2.1.min.js"></script>
+<script src="css/semantic.min.js"></script>
+-->
+<script type="text/javascript" src="js/adapter-latest.js"></script>
+<script type="text/javascript" src="js/peer.js"></script>
+
+<script src="jspm_packages/system.js"></script>
+<script src="config.js"></script>
+<script>
+  // Compatibility shim
+  //navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+  System.import('aurelia-bootstrapper');
+</script>
+
+</body>
+</html>

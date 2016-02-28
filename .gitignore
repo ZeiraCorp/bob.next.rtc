@@ -5,3 +5,7 @@ public/jspm_packages/
 # Idea
 .idea/
 
+
+*.pem
+
+~/*
