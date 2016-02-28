@@ -27,7 +27,7 @@
 
 ## Use
 
-- mobile webapp [wip](wip) (*can't make call, only to receive call*)
+- mobile webapp [https://ip_of_your_server_name:4041/mob](https://ip_of_your_server_name:4041/mob) (*can't make call, only to receive call*)
 - desktop webapp: [https://your_server_name:4041/](https://your_server_name:4041/)
 
 ## Remarks
