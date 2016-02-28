@@ -6,22 +6,145 @@
   <link rel="stylesheet" href="css/semantic.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1"></head>
 <body>
+
 <div class="ui container">
   <div class="ui divider"></div>
 
   <div class="ui segment">
-    <h1 class="ui header">Bob:next:RTC:Mobile</h1>
+    <h1 class="ui header">BoB:next:RTC:mobile</h1>
   </div>
+
+  <div class="ui segment">
+    <!--
+    <h2 class="ui header">Videos</h2>
+    -->
+    <div class="ui two column middle aligned very relaxed stackable grid">
+      <div class="center aligned column">
+
+        <div class="ui card centered">
+          <div class="image">
+            <!--
+            video
+            -->
+            <video width="100%" id="their-video" autoplay></video>
+          </div>
+          <!--
+          <div class="content">
+            <a class="header">Id: <span id="remote-who"></span></a>
+            <div class="description">
+              Remote video
+            </div>
+          </div>
+          -->
+        </div>
+
+      </div>
+      <div class="ui vertical divider"></div>
+      <div id="local-video" class="center aligned column">
+
+        <div class="ui card centered">
+          <div class="image">
+            <!--
+            video
+            -->
+            <video width="100%" id="my-video" autoplay muted="true"></video>
+          </div>
+          <div class="content">
+            <a class="header">Id: <span id="local-who"></span></a>
+            <div class="description">
+              Local video
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="ui segment">
+    <p>Currently in call with <span id="their-id">...</span></p>
+  </div>
+
+  <!--
+  <div class="ui segment">
+    <peer-connection
+      peerPort="9000"
+      peerPath="/myapp">
+    </peer-connection>
+  </div>
+  -->
 
 </div>
 
 <script type="text/javascript" src="js/jquery-2.2.1.min.js"></script>
 <script type="text/javascript" src="js/adapter-latest.js"></script>
-
 <script type="text/javascript" src="js/peer.js"></script>
-
+<!--
 <script src="css/semantic.min.js"></script>
+-->
+<script>
 
+  function initialize () {
+    // Get audio/video stream
+    navigator.getUserMedia({audio: true, video: true}, function(stream){
+      // Set your video displays
+
+      //$('#my-video').prop('src', URL.createObjectURL(stream));
+
+      window.localStream = stream;
+
+    }, function(){
+      // error
+    });
+  }
+
+
+  function displayCall (call) {
+    // Hang up on an existing call if present
+    if (window.existingCall) {
+      window.existingCall.close();
+    }
+
+    // Wait for stream on the call, then set peer video display
+    call.on('stream', function(stream){
+      $('#their-video').prop('src', URL.createObjectURL(stream));
+    });
+
+    // UI stuff
+    window.existingCall = call;
+    $('#their-id').text(call.peer);
+
+  }
+
+  var host = window.location.host.split(':')[0]
+    , peer = new Peer("bob", {host: host, port: 9000, path: '/myapp'});
+
+
+  peer.on('open', function(){
+    console("peer connection is open");
+  });
+
+  // Receiving a call
+  peer.on('call', function(call){
+    // Answer the call automatically (instead of prompting user) for demo purposes
+    call.answer(window.localStream);
+    displayCall(call);
+  });
+
+  peer.on('error', function(err){
+    alert(err.message);
+  });
+
+  // Click handlers setup
+  $(function(){
+    // Get things started
+    $("#local-video").hide();
+    initialize();
+  });
+
+
+</script>
 
 </body>
 </html>
