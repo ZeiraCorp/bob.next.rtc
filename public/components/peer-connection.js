@@ -4,16 +4,21 @@
 import {inject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {bindable} from 'aurelia-framework';
+import {LanService} from '../services/lan';
 
-@inject(EventAggregator)
+@inject(EventAggregator, LanService)
 export class PeerConnection {
   /*
     never use camel case or pascal case with bindable properties: only lower case
    */
   @bindable peerport;
   @bindable peerpath;
-  constructor(eventAggregator) {
+  constructor(eventAggregator, lanService) {
     this.ea = eventAggregator;
+    this.lanService = lanService;
+
+    //console.log("lanService", lanService);
+
     this.host = window.location.host.split(':')[0];
     this.ea.subscribe('callInitialized', response => {
       this.startCommunication(response.call);
@@ -37,8 +42,6 @@ export class PeerConnection {
     call.on('close', () => {
       // foo...
     })
-
-
     
   }
   
@@ -46,6 +49,9 @@ export class PeerConnection {
     console.log("host", this.host);
     console.log("peerPort", this.peerport);
     console.log("peerPath", this.peerpath);
+
+    this.lanService.getIp().then(data => this.ip = data.ip).catch(err => this.ip = "--.--.--.--");
+    
     this.peer = new Peer({host: this.host, port: Number(this.peerport), path: this.peerpath});
 
     /**
