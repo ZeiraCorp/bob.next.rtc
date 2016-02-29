@@ -6,6 +6,8 @@ import bodyParser from 'body-parser';
 import config from './app.config';
 import {TinyWorker} from './libs/tinyworker'
 import Peer from 'peer';
+import {MQTTBroker} from './broker/MQTTBroker';
+
 
 import {SSEController} from './features/sse/sseController';
 import {LanController} from './features/lan/lanController';
@@ -21,8 +23,13 @@ var privateKey  = fs.readFileSync('key.pem', 'utf8');
 var certificate = fs.readFileSync('cert.pem', 'utf8');
 var credentials = {key: privateKey, cert: certificate};
 
+/**
+ * ===============================================================
+ * MQTT Broker
+ * ===============================================================
+ */
 
-let mqttBroker = {};
+let mqttBroker = MQTTBroker.getInstance(config().mqttPort);
 
 /**
  * ===============================================================
