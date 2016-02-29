@@ -9,8 +9,13 @@
 - Semantic UI - 2.0.0
 - Traceur (ES2015 server side)
 - Babel (ES2015 front side)
+- socket.io-1.4.5.js (front side)
+- socket.io (server side)
+- Mosca & MQTT.js
 - Aurelia
 - [https://github.com/webrtc/adapter](https://github.com/webrtc/adapter)
+
+- [Stairways](https://github.com/k33g/stairways) - Experimental project
 
 ## Install
 
