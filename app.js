@@ -4,14 +4,15 @@ import https from 'https';
 import fs from 'fs';
 import bodyParser from 'body-parser';
 import config from './app.config';
-import {TinyWorker} from './libs/tinyworker'
 import Peer from 'peer';
-import {MQTTBroker} from './broker/MQTTBroker';
-
+import chalk from 'chalk';
+import {MQTTBroker} from './mqtt/MQTTBroker';
+import {MQTTClient} from './mqtt/MQTTClient';
 
 import {SSEController} from './features/sse/sseController';
 import {LanController} from './features/lan/lanController';
 import {MobileController} from './features/mobile/mobileController';
+import {MotionController} from './features/motion/motionController';
 
 
 /**
@@ -19,52 +20,27 @@ import {MobileController} from './features/mobile/mobileController';
  * Certificates for SSL mode
  * ===============================================================
  */
-var privateKey  = fs.readFileSync('key.pem', 'utf8');
-var certificate = fs.readFileSync('cert.pem', 'utf8');
-var credentials = {key: privateKey, cert: certificate};
+let privateKey  = fs.readFileSync('key.pem', 'utf8');
+let certificate = fs.readFileSync('cert.pem', 'utf8');
+let credentials = {key: privateKey, cert: certificate};
 
 /**
  * ===============================================================
- * MQTT Broker
+ * MQTT Stuff
  * ===============================================================
  */
-
-let mqttBroker = MQTTBroker.getInstance(config().mqttPort);
-
-/**
- * ===============================================================
- * SSE Worker
- * ===============================================================
- */
-let random = (maxNum) => {
-  return Math.ceil(Math.random() * maxNum);
-};
-
-let openConnections = [];
-let iotData = {};
-// simulation of data
-let dataWorker = new TinyWorker(iotData => {
-  iotData.value = random(100);
+let mqttBroker = MQTTBroker.getInstance({mqttPort: config().mqttPort});
+let mqttClient = MQTTClient.getInstance({
+  mqttPort: config().mqttPort, 
+  mqttBroker: "localhost", //config().hostName,
+  id:"mediator",
+  subscriptions:["messages/+", "sensors/+"]
 });
-dataWorker.start(iotData);
-
-let sseWorker = new TinyWorker(options => {
-  options.connections.forEach((resp) => {
-    var d = new Date();
-    resp.write('id: ' + d.getMilliseconds() + '\n');
-    resp.write('data:' + JSON.stringify(options.data) +   '\n\n');
-  });
-});
-
-sseWorker.start({
-  connections: openConnections,
-  data: iotData
-});
-
 
 /**
  * ===============================================================
  * Peer Server
+ * TODO: Externalize
  * ===============================================================
  */
 let server = Peer.PeerServer({
@@ -77,11 +53,11 @@ let server = Peer.PeerServer({
 });
 
 server.on('connection', (id) => {
-  console.log("connection", id)
+  console.log(chalk.green("connection:" + id));
 });
 
 server.on('disconnect', (id) => {
-  console.log("disconnect", id)
+  console.log(chalk.green("disconnect:" + id));
 });
 
 
@@ -105,18 +81,23 @@ app.use('/mob', new MobileController().router);
 
 app.use('/api/lan', new LanController().router);
 
+app.use('/api/motion', new MotionController({
+  mqttClient: mqttClient
+}).router);
+
 app.use('/api/sse', new SSEController({
-  mqttBroker: mqttBroker,
-  openConnections: openConnections,
-  worker: sseWorker
+  mqttClient: mqttClient
 }).router);
 
 
-var httpServer = http.createServer(app);
-var httpsServer = https.createServer(credentials, app);
+let httpServer = http.createServer(app);
+let httpsServer = https.createServer(credentials, app);
 //app.listen(httpPort);
 httpServer.listen(httpPort);
 httpsServer.listen(httpsPort);
 
-console.log("Listening on (http):", httpPort, " (https):", httpsPort, " and (peer):", config().peerPort);
+console.log(
+  chalk.blue("Listening on (http):" + httpPort + " (https):" + httpsPort) +
+  chalk.green(" and (peer):" + config().peerPort)
+);
 

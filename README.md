@@ -6,6 +6,7 @@
 
 - [PeerServer](https://github.com/peers/peerjs-server)
 - [PeerJS](http://peerjs.com)
+- [Chalk](https://github.com/chalk/chalk)
 - Semantic UI - 2.0.0
 - Traceur (ES2015 server side)
 - Babel (ES2015 front side)
@@ -13,7 +14,7 @@
 - Aurelia
 - [https://github.com/webrtc/adapter](https://github.com/webrtc/adapter)
 
-- [Stairways](https://github.com/k33g/stairways) - Experimental project
+- [Stairways](https://github.com/k33g/stairways) - Experimental (functional) project
 
 ## Install
 

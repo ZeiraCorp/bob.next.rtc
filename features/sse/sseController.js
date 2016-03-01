@@ -5,13 +5,52 @@
 import {RoutesController} from '../../libs/routesController';
 import {TinyWorker} from '../../libs/tinyworker'
 
+/**
+ * ===============================================================
+ * SSE Stuff
+ * ===============================================================
+ */
+let random = (maxNum) => {
+  return Math.ceil(Math.random() * maxNum);
+};
+
+// simulation of data
+let getDataWorker = () => { 
+  return new TinyWorker(iotData => {
+  iotData.value = random(100);
+  });
+};
+    
+let getSSEWorker = () => {
+  return new TinyWorker(options => {
+    //console.log()
+    options.connections.forEach((resp) => {
+      var d = new Date();
+      resp.write('id: ' + d.getMilliseconds() + '\n');
+      resp.write('data:' + JSON.stringify(options.data) +   '\n\n');
+    });
+  });
+};
+
+
+/**
+ * ===============================================================
+ * SSEController
+ * ===============================================================
+ */
 export class SSEController extends RoutesController {
   constructor(options) {
     super(options);
+    this.mqttClient = options.mqttClient;
     
-    this.mqttBroker = options.mqttBroker;
-    this.openConnections = options.openConnections;
-    this.worker = options.worker;
+    this.openConnections = [];
+    let iotData = {};
+    getDataWorker().start(iotData)
+    
+    this.worker = getSSEWorker().start({
+      connections: this.openConnections,
+      data: iotData
+    });
     
     this.router.get('/all', (req, res) => this.sse(req, res));
 
@@ -46,7 +85,7 @@ export class SSEController extends RoutesController {
     // array and remove this connection.
     req.on("close", function() {
       var toRemove;
-      this.openConnections = this.openConnections != null ? this.openConnections : []
+      this.openConnections = this.openConnections != null ? this.openConnections : [];
       for (var j =0 ; j < this.openConnections.length ; j++) {
         if (this.openConnections[j] == res) {
           toRemove =j;
