@@ -9,15 +9,15 @@ import {LanService} from '../services/lan';
 @inject(EventAggregator, LanService)
 export class PeerConnection {
   /*
-    never use camel case or pascal case with bindable properties: only lower case
+    === WARNING!!! ===
+    never use camel case or pascal case with 
+    bindable properties: only lower case
    */
   @bindable peerport;
   @bindable peerpath;
   constructor(eventAggregator, lanService) {
     this.ea = eventAggregator;
     this.lanService = lanService;
-
-    //console.log("lanService", lanService);
 
     this.host = window.location.host.split(':')[0];
     this.ea.subscribe('callInitialized', response => {
@@ -50,8 +50,21 @@ export class PeerConnection {
     console.log("peerPort", this.peerport);
     console.log("peerPath", this.peerpath);
 
-    this.lanService.getIp().then(data => this.ip = data.ip).catch(err => this.ip = "--.--.--.--");
-    
+    /* get some informations from host */
+    //this.lanService.getIp().then(data => this.ip = data.ip).catch(err => this.ip = "--.--.--.--");
+    //this.lanService.getHostName().then(data => this.hostname = data.hostname).catch(err => this.hostname = "john.doe.nowhere");
+
+    this.lanService.getHostInformations().then(data => {
+      this.ip = data.ip;
+      this.hostname = data.hostname;
+    }).catch(err => {
+      this.ip = "--.--.--.--";
+      this.hostname = "john.doe.nowhere";
+    });
+
+    /**
+     * Create a peer connection for using signaling
+     */
     this.peer = new Peer({host: this.host, port: Number(this.peerport), path: this.peerpath});
 
     /**

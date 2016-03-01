@@ -2,6 +2,7 @@
   <require from='./components/make-call'></require>
   <require from='./components/video-card'></require>
   <require from='./components/peer-connection'></require>
+  <require from='./components/move-bob'></require>
   <div class="ui container">
     <div class="ui divider"></div>
 
@@ -20,6 +21,9 @@
             remote=true
             description="Remote video">
           </video-card>
+          <div class="ui segment">
+            <move-bob></move-bob>
+          </div>
         </div>
         <div class="ui vertical divider"></div>
         <div class="center aligned column">
@@ -34,6 +38,11 @@
 
       </div>
     </div>
+    <!--
+    <div class="ui segment">
+      <move-bob></move-bob>
+    </div>
+    -->
 
     <div class="ui segment">
       <make-call></make-call>

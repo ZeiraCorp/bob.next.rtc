@@ -1,12 +1,13 @@
 <template>
   <div class="ui message">
     <div class="header">
-      ${host}
+      ${host} <i><small>(from url)</small></i>
     </div>
     <ul class="list">
       <li>Peer Port: ${peerport}</li>
       <li>Peer Path: ${peerpath}</li>
       <li>Peer IP: <b style="color: darkorange">${ip}</b></li>
+      <li>Peer HostName: <b style="color: darkorange">${hostname}</b></li>
     </ul>
   </div>
 </template>
