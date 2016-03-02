@@ -16,6 +16,7 @@ export class MQTTClient {
     let client = mqtt.connect(`mqtt://${mqttBroker}:${mqttPort}?clientId=${this.id}`);
     //let client = mqtt.connect(`mqtt://localhost:${mqttPort}?clientId=${this.id}`);
 
+    client.handles = [];
 
     //console.log("MQTTClient options", options)
     //console.log("MQTTClient", client)
@@ -40,7 +41,19 @@ export class MQTTClient {
       console.log(chalk.magenta("message on topic:" + topic + ":" + message.toString()));
       //let json = JSON.parse(message.toString());
 
+      let search = client.handles.filter((handle) => {
+        return handle.topic==topic;
+      });
+      
+      if(search.length>=1) {
+        search[0].handle(message.toString());
+      }
+      
+      
+
     });
+
+    
     
     return client;
 

@@ -42,8 +42,25 @@ export class SSEController extends RoutesController {
   constructor(options) {
     super(options);
     this.mqttClient = options.mqttClient;
+
+    let connections = this.openConnections = [];
+
+    this.mqttClient.handles.push({
+      topic:"sensors/distance",
+      handle: (data) => {
+        //console.log("from sensors module", data)
+        
+        connections.forEach((resp) => {
+          var d = new Date();
+          resp.write('id: ' + d.getMilliseconds() + '\n');
+          resp.write('data:' + JSON.stringify(JSON.parse(data)) +   '\n\n');
+        });
+        
+      }
+    });
     
-    this.openConnections = [];
+    
+    /* for simulation
     let iotData = {};
     getDataWorker().start(iotData)
     
@@ -51,6 +68,7 @@ export class SSEController extends RoutesController {
       connections: this.openConnections,
       data: iotData
     });
+    */
     
     this.router.get('/all', (req, res) => this.sse(req, res));
 
