@@ -28,7 +28,7 @@ export class MotionController extends RoutesController {
 
   left(req, res) {
     console.log(chalk.blue("MotionController left"));
-    this.mqttClient.publish('motion', JSON.stringify({
+    this.mqttClient.publish('motion/left', JSON.stringify({
       action: "left"
     }));
     res.json({message:"ok"});
@@ -36,7 +36,7 @@ export class MotionController extends RoutesController {
 
   right(req, res) {
     console.log(chalk.blue("MotionController right"));
-    this.mqttClient.publish('motion', JSON.stringify({
+    this.mqttClient.publish('motion/right', JSON.stringify({
       action: "right"
     }));
     res.json({message:"ok"});
@@ -44,7 +44,7 @@ export class MotionController extends RoutesController {
 
   forward(req, res) {
     console.log(chalk.blue("MotionController forward"));
-    this.mqttClient.publish('motion', JSON.stringify({
+    this.mqttClient.publish('motion/forward', JSON.stringify({
       action: "forward"
     }));
     res.json({message:"ok"});
@@ -52,7 +52,7 @@ export class MotionController extends RoutesController {
 
   backward(req, res) {
     console.log(chalk.blue("MotionController backward"));
-    this.mqttClient.publish('motion', JSON.stringify({
+    this.mqttClient.publish('motion/backward', JSON.stringify({
       action: "backward"
     }));
     res.json({message:"ok"});
@@ -60,7 +60,7 @@ export class MotionController extends RoutesController {
 
   stop(req, res) {
     console.log(chalk.blue("MotionController stop"));
-    this.mqttClient.publish('motion', JSON.stringify({
+    this.mqttClient.publish('motion/stop', JSON.stringify({
       action: "stop"
     }));
     res.json({message:"ok"});
@@ -68,7 +68,7 @@ export class MotionController extends RoutesController {
   
   speed(req, res) {
     console.log(chalk.blue("MotionController speed:" + req.params.speed));
-    this.mqttClient.publish('motion', JSON.stringify({
+    this.mqttClient.publish('motion/speed', JSON.stringify({
       action: "speed", speed:req.params.speed
     }));
     res.json({message:"ok"});
