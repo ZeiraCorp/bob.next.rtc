@@ -101,3 +101,7 @@ console.log(
   chalk.green(" and (peer):" + config().peerPort)
 );
 
+console.log(
+  chalk.white.bgBlack(config().hostName + " " + config().hostIp)
+);
+
