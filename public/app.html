@@ -3,6 +3,7 @@
   <require from='./components/video-card'></require>
   <require from='./components/peer-connection'></require>
   <require from='./components/move-bob'></require>
+  <require from='./components/sensor-scout'></require>
   <div class="ui container">
     <div class="ui divider"></div>
 
@@ -11,9 +12,15 @@
     </div>
 
     <div class="ui segment">
+      <!--
       <h2 class="ui header">Videos</h2>
+      -->
+
       <div class="ui two column middle aligned very relaxed stackable grid">
         <div class="center aligned column">
+          <div class="ui segment">
+            <sensor-scout></sensor-scout>
+          </div>
           <video-card
             videoid="their-video"
             who="???"
