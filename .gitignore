@@ -9,3 +9,5 @@ public/jspm_packages/
 *.pem
 
 ~/*
+
+_sandbox/

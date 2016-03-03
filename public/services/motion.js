@@ -39,4 +39,9 @@ export class MotionService {
   speed(speed) {
     return this.http.fetch(`/api/motion/speed/${speed}`).then(response=> response.json());
   }
+  
+  meepMeep() {
+    return this.http.fetch("/api/motion/meepmeep").then(response=> response.json());
+
+  }
 }

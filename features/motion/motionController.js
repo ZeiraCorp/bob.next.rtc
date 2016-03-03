@@ -20,6 +20,9 @@ export class MotionController extends RoutesController {
     this.router.get('/forward', (req, res) => this.forward(req, res));
     this.router.get('/backward', (req, res) => this.backward(req, res));
     this.router.get('/stop', (req, res) => this.stop(req, res));
+
+    this.router.get('/meepmeep', (req, res) => this.meepMeep(req, res));
+    
     this.router.get('/speed/:speed', (req, res) => this.speed(req, res));
 
     this.mqttClient = options.mqttClient;
@@ -65,6 +68,15 @@ export class MotionController extends RoutesController {
     }));
     res.json({message:"ok"});
   }
+
+  meepMeep(req, res) {
+    console.log(chalk.blue("MotionController meep meep"));
+    this.mqttClient.publish('motion/meepmeep', JSON.stringify({
+      action: "meepMeep"
+    }));
+    res.json({message:"ok"});
+  }
+  
   
   speed(req, res) {
     console.log(chalk.blue("MotionController speed:" + req.params.speed));

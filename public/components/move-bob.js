@@ -32,6 +32,10 @@ export class MoveBob {
     this.motionService.stop().then(data => console.log("this.motionService.stop", data))
   }
 
+  meepMeep() {
+    this.motionService.meepMeep().then(data => console.log("this.motionService.meepMeep", data))
+  }
+
   speed() {
     this.speedValue == "slow" ? this.speedValue = "fast" : this.speedValue = "slow";
     this.motionService.speed(this.speedValue).then(data => console.log("this.motionService.speed", this.speedValue, data))
